@@ -5,7 +5,6 @@ from scipy import signal
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-
 def normalize_image(img: np.ndarray, threshold: float = 0.1):
     """
     normalize the image to be between 0 and 1
