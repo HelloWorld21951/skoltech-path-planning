@@ -20,6 +20,7 @@ def main():
     space = data["environment"]
 
     start_state = Position2DDiscreteTheta(6, 6, 2)
+    # goal_state = Position2DDiscreteTheta(6, 6, 2)
     goal_state = Position2DDiscreteTheta(55, 55, 0)
 
     # visualize_agent_configs(rod, "results/task_1", "agent_config")

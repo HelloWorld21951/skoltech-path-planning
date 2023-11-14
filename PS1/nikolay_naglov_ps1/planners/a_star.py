@@ -68,9 +68,9 @@ class AStar(PathPlanner[State]):
                 if self._collision_checker.is_collision(next_state):
                     continue
                 if next_state not in self._visited.keys():
-                    print(
-                        f"Visiting new state: x: {current_state.x} y: {current_state.y} theta: {current_state.theta}"
-                    )
+                    # print(
+                    #     f"Visiting new state: x: {current_state.x} y: {current_state.y} theta: {current_state.theta}"
+                    # )
                     self._visited[next_state] = (
                         self._visited[current_state] + action.cost()
                     )

@@ -18,9 +18,19 @@ class CollisionCheckerConvolve2D(CollisionChecker[Position2DDiscreteTheta]):
         configuration_space = np.empty(
             (space.space.shape[0], space.space.shape[1], agent.config.shape[2])
         )
+        agent_x_dim = int((agent.config.shape[0] - 1) / 2)
+        agent_y_dim = int((agent.config.shape[1] - 1) / 2)
         for cfg_num in range(agent.config.shape[2]):
             configuration_space[:, :, cfg_num] = normalize_image(
                 convolve2d(space.space, agent.config[:, :, cfg_num], "same", "symm")
+            )
+            configuration_space[:, :, cfg_num] = np.pad(
+                configuration_space[
+                    agent_x_dim:-agent_x_dim, agent_y_dim:-agent_y_dim, cfg_num
+                ],
+                (agent_x_dim, agent_y_dim),
+                "constant",
+                constant_values=1,
             )
         return configuration_space
 
