@@ -1,9 +1,9 @@
-from typing import Generic, List
+from typing import Generic, List, Union
 
 from actions.action_interface import Action
 from states.states import State
 from collision_checkers.collision_checker_interface import CollisionChecker
-from spaces.space_interface import Space
+from spaces.spaces import Workspace
 from planners.path import Path
 
 
@@ -19,27 +19,27 @@ class PathPlanner(Generic[State]):
         return state in self._goal_states
 
     @property
-    def start_state(self) -> State | None:
+    def start_state(self) -> Union[State, None]:
         return self._start_state
 
     @start_state.setter
-    def set_start_state(self, state: State) -> None:
+    def start_state(self, state: State) -> None:
         self._start_state = state
 
     @property
-    def goal_state(self) -> State | None:
+    def goal_state(self) -> Union[State, None]:
         return self._goal_state
 
     @goal_state.setter
-    def set_goal_state(self, state: State) -> None:
+    def goal_state(self, state: State) -> None:
         self._goal_state = state
 
     @property
-    def workspace(self) -> Space | None:
+    def workspace(self) -> Union[Workspace, None]:
         return self._workspace
 
     @workspace.setter
-    def set_workspace(self, workspace: Space) -> None:
+    def workspace(self, workspace: Workspace) -> None:
         self._workspace = workspace
 
     @property
@@ -47,7 +47,7 @@ class PathPlanner(Generic[State]):
         return self._available_actions
 
     @available_actions.setter
-    def set_available_actions(self, actions: List[Action]) -> None:
+    def available_actions(self, actions: List[Action]) -> None:
         self._available_actions = actions
 
     def plan(self) -> Path:

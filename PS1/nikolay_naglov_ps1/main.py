@@ -1,6 +1,6 @@
-# from planners.a_star import AStarL1Heuristic, AStarL1WithAngleHeuristic, Dijkstra
+from planners.a_star import AStarL1Heuristic, AStarL1WithAngleHeuristic, Dijkstra
 from states.states import Position2DDiscreteTheta
-
+from spaces.spaces import WorkspaceNumpyArray
 from utils.data_loader import load_data
 from utils.visualizer import (
     plot_results,
@@ -8,32 +8,63 @@ from utils.visualizer import (
     visualize_agent_in_workspace,
     visualize_workspace,
 )
+from collision_checkers.convolve2d import CollisionCheckerConvolve2D
+from agents.agents import AgentNumpyArray
+from actions.linear_movements import MoveUp, MoveDown, MoveLeft, MoveRight
+from actions.rotations import RotateCW, RotateCCW
 
 
 def main():
     data = load_data("datasets/data_ps1.npz")
-    agent = data["rod"]
-    workspace = data["environment"]
+    rod = data["rod"]
+    space = data["environment"]
 
     start_state = Position2DDiscreteTheta(6, 6, 2)
     goal_state = Position2DDiscreteTheta(55, 55, 0)
 
-    visualize_agent_configs(agent, "results/task_1", "agent_config")
-    visualize_workspace(workspace, "results/task_1", "workspace")
-    visualize_agent_in_workspace(
-        agent,
-        start_state.to_tuple(),
-        workspace,
-        "results/task_1",
-        "agent_in_start_cfg",
-    )
-    visualize_agent_in_workspace(
-        agent,
-        goal_state.to_tuple(),
-        workspace,
-        "results/task_1",
-        "agent_in_goal_cfg",
-    )
+    # visualize_agent_configs(rod, "results/task_1", "agent_config")
+    # visualize_workspace(space, "results/task_1", "workspace")
+    # visualize_agent_in_workspace(
+    #     rod,
+    #     start_state.to_tuple(),
+    #     space,
+    #     "results/task_1",
+    #     "agent_in_start_cfg",
+    # )
+    # visualize_agent_in_workspace(
+    #     rod,
+    #     goal_state.to_tuple(),
+    #     space,
+    #     "results/task_1",
+    #     "agent_in_goal_cfg",
+    # )
+
+    workspace = WorkspaceNumpyArray(space)
+    agent = AgentNumpyArray(rod)
+    collision_checker = CollisionCheckerConvolve2D(workspace, agent)
+    available_actions = [
+        MoveUp(),
+        MoveDown(),
+        MoveLeft(),
+        MoveRight(),
+        RotateCW(),
+        RotateCCW(),
+    ]
+
+    # for angle in range(collision_checker.cspace.shape[2]):
+    #     visualize_workspace(
+    #         collision_checker.cspace[:, :, angle],
+    #         "results/task_1",
+    #         f"configuration_space{angle}",
+    #     )
+
+    path_planner = Dijkstra(collision_checker)
+    path_planner.start_state = start_state
+    path_planner.goal_state = goal_state
+    path_planner.workspace = workspace
+    path_planner.available_actions = available_actions
+    result_path = path_planner.plan()
+
     return 0
 
 

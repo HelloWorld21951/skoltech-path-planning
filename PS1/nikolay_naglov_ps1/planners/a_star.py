@@ -1,13 +1,12 @@
 from queue import PriorityQueue
 from typing import Dict
-
 from collision_checkers.collision_checker_interface import CollisionChecker
-from states.states import State, Position2DDiscreteTheta
+from states.states import PrioritizedState, State, Position2DDiscreteTheta
 from planners.path import Path
 from planners.planner_interface import PathPlanner
 
 
-class AStar(PathPlanner):
+class AStar(PathPlanner[State]):
     def __init__(self, collision_checker: CollisionChecker) -> None:
         super().__init__(collision_checker)
         self._visited: Dict[State, int] = {}
@@ -23,7 +22,6 @@ class AStar(PathPlanner):
         self._visited.clear()
         self._parent_table.clear()
         self._queue = PriorityQueue()
-        self.path.clear()
 
     def _make_path_from_parent_table(self) -> Path:
         list_states = [self.goal_state]
@@ -57,26 +55,31 @@ class AStar(PathPlanner):
             )
 
         self._cleanup()
-        self._queue.put((0, self.start_state))
+        self._queue.put(PrioritizedState(0, self.start_state))
         self._visited[self.start_state] = 0
 
         while not self._queue.empty():
-            current_state = self._queue.get()
+            current_state = self._queue.get().state
             if current_state == self.goal_state:
+                print(f"Path was found")
                 return self._make_path_from_parent_table()
             for action in self.available_actions:
                 next_state = action.apply(current_state)
                 if self._collision_checker.is_collision(next_state):
                     continue
                 if next_state not in self._visited.keys():
+                    print(
+                        f"Visiting new state: x: {current_state.x} y: {current_state.y} theta: {current_state.theta}"
+                    )
                     self._visited[next_state] = (
                         self._visited[current_state] + action.cost()
                     )
                     self._parent_table[next_state] = current_state
                     self._queue.put(
-                        (
+                        PrioritizedState(
                             self._visited[next_state]
-                            + self._heuristic(next_state, self.goal_state)
+                            + self._heuristic(next_state, self.goal_state),
+                            next_state,
                         )
                     )
                 elif (

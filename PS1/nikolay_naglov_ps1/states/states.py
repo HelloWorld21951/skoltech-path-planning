@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from typing import TypeVar, Tuple
 import numpy as np
 
@@ -36,6 +37,12 @@ class Position2D(object):
 
     def to_tuple(self) -> Tuple[int]:
         return (self.x, self.y, self.theta)
+
+
+@dataclass(order=True)
+class PrioritizedState:
+    priority: int
+    state: State = field(compare=False)
 
 
 class Position2DDiscreteTheta(Position2D):
