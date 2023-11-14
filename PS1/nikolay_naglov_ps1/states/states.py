@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from typing import TypeVar, Tuple
-import numpy as np
 
 State = TypeVar("State")
 

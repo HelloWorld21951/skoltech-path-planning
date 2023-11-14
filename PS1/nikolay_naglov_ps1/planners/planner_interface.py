@@ -1,10 +1,10 @@
 from typing import Generic, List, Union
 
 from actions.action_interface import Action
-from states.states import State
 from collision_checkers.collision_checker_interface import CollisionChecker
+from states.path import Path
 from spaces.spaces import Workspace
-from planners.path import Path
+from states.states import State
 
 
 class PathPlanner(Generic[State]):

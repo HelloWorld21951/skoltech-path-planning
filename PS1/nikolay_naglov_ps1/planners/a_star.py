@@ -1,9 +1,10 @@
 from queue import PriorityQueue
 from typing import Dict
+
 from collision_checkers.collision_checker_interface import CollisionChecker
-from states.states import PrioritizedState, State, Position2DDiscreteTheta
-from planners.path import Path
 from planners.planner_interface import PathPlanner
+from states.path import Path
+from states.states import PrioritizedState, State, Position2DDiscreteTheta
 
 
 class AStar(PathPlanner[State]):
@@ -61,16 +62,18 @@ class AStar(PathPlanner[State]):
         while not self._queue.empty():
             current_state = self._queue.get().state
             if current_state == self.goal_state:
+                final_path = self._make_path_from_parent_table()
                 print(f"{self.__class__}: Path was found")
-                return self._make_path_from_parent_table()
+                print(
+                    f"{self.__class__}: Number of visited states: {len(self._visited)}"
+                )
+                print(f"{self.__class__}: Final cost: {final_path.cost}")
+                return final_path
             for action in self.available_actions:
                 next_state = action.apply(current_state)
                 if self._collision_checker.is_collision(next_state):
                     continue
                 if next_state not in self._visited.keys():
-                    # print(
-                    #     f"Visiting new state: x: {current_state.x} y: {current_state.y} theta: {current_state.theta}"
-                    # )
                     self._visited[next_state] = (
                         self._visited[current_state] + action.cost()
                     )

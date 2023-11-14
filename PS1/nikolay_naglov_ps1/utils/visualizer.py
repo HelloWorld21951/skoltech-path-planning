@@ -1,6 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import numpy as np
 import os
 
 from utils.image_utils import merge_enviroment

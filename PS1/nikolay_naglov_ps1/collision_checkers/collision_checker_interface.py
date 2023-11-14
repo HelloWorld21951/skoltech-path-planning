@@ -2,8 +2,8 @@ from typing import Generic
 from functools import cached_property
 
 from agents.agents import Agent
-from states.states import State
 from spaces.spaces import Workspace
+from states.states import State
 
 
 class CollisionChecker(Generic[State]):

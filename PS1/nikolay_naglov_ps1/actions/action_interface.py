@@ -13,4 +13,6 @@ class Action(Generic[State]):
         )
 
     def cost(self) -> int:
-        raise NotImplementedError(f"Action cost for {self.__class__} is not implemented")
+        raise NotImplementedError(
+            f"Action cost for {self.__class__} is not implemented"
+        )

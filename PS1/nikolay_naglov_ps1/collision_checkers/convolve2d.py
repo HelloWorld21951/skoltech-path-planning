@@ -2,9 +2,9 @@ import numpy as np
 from scipy.signal import convolve2d
 
 from agents.agents import AgentNumpyArray
+from collision_checkers.collision_checker_interface import CollisionChecker
 from spaces.spaces import WorkspaceNumpyArray
 from states.states import Position2DDiscreteTheta
-from collision_checkers.collision_checker_interface import CollisionChecker
 from utils.image_utils import normalize_image
 
 
