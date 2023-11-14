@@ -61,7 +61,7 @@ class AStar(PathPlanner[State]):
         while not self._queue.empty():
             current_state = self._queue.get().state
             if current_state == self.goal_state:
-                print(f"Path was found")
+                print(f"{self.__class__}: Path was found")
                 return self._make_path_from_parent_table()
             for action in self.available_actions:
                 next_state = action.apply(current_state)

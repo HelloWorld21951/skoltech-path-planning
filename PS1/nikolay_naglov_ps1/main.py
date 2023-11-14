@@ -20,7 +20,6 @@ def main():
     space = data["environment"]
 
     start_state = Position2DDiscreteTheta(6, 6, 2)
-    # goal_state = Position2DDiscreteTheta(6, 6, 2)
     goal_state = Position2DDiscreteTheta(55, 55, 0)
 
     # visualize_agent_configs(rod, "results/task_1", "agent_config")
@@ -59,15 +58,29 @@ def main():
     #         f"configuration_space{angle}",
     #     )
 
-    path_planner = Dijkstra(collision_checker)
+    # path_planner = Dijkstra(collision_checker)
+    # path_planner = AStarL1Heuristic(collision_checker)
+    path_planner = AStarL1WithAngleHeuristic(collision_checker)
     path_planner.start_state = start_state
     path_planner.goal_state = goal_state
     path_planner.workspace = workspace
     path_planner.available_actions = available_actions
     result_path = path_planner.plan().to_list_of_tuples()
 
+    # plot_results(
+    #     workspace.space, agent.config, result_path, "results/task_2/dijkstra.mp4"
+    # )
+    # plot_results(
+    #     workspace.space,
+    #     agent.config,
+    #     result_path,
+    #     "results/task_2/a_star_l1_heuristic.mp4",
+    # )
     plot_results(
-        workspace.space, agent.config, result_path, "results/task_2/dijkstra.mp4"
+        workspace.space,
+        agent.config,
+        result_path,
+        "results/task_2/a_star_l1_with_angle_heuristic.mp4",
     )
 
     return 0
