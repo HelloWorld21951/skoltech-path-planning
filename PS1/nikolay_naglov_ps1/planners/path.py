@@ -15,3 +15,6 @@ class Path(Generic[State]):
     @property
     def cost(self) -> int:
         return self._cost
+
+    def to_list_of_tuples(self):
+        return [state.to_tuple() for state in self._path]

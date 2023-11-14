@@ -64,7 +64,11 @@ def main():
     path_planner.goal_state = goal_state
     path_planner.workspace = workspace
     path_planner.available_actions = available_actions
-    result_path = path_planner.plan()
+    result_path = path_planner.plan().to_list_of_tuples()
+
+    plot_results(
+        workspace.space, agent.config, result_path, "results/task_2/dijkstra.mp4"
+    )
 
     return 0
 
