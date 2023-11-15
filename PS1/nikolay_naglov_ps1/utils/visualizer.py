@@ -8,7 +8,6 @@ from utils.image_utils import merge_enviroment
 
 def visualize_agent_configs(configs: np.ndarray, folder: str, filename: str):
     for cfg_num in range(0, configs.shape[2]):
-        plt.figure(figsize=(100, 100))
         plt.imsave(
             os.path.join(folder, f"{filename}{cfg_num}.png"), configs[:, :, cfg_num]
         )
