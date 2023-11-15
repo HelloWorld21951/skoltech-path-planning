@@ -54,12 +54,35 @@ def main():
     start = (6, 6, 2)
     goal = (55, 55, 0)
 
+    print("Dijkstra:")
     planner = AStar(collision_function, zero_heuristic)
     planner.setup(start, goal)
     path = planner.build_path()
 
     plotting_results(environment, rod, path)
 
+    # Task 2B
+
+    def l1_heuristic(state_1, state_2):
+        return abs(state_2[0] - state_1[0]) + abs(state_2[1] - state_1[1])
+    
+    print("A* with L1 heuristic")
+    planner = AStar(collision_function, l1_heuristic)
+    planner.setup(start, goal)
+    planner.build_path()
+
+    # Task 2C
+
+    def l1_angle_heuristic(state_1, state_2):
+        delta_theta = abs(state_2[2] - state_1[2])
+        if delta_theta == 3:
+            delta_theta = 1
+        return abs(state_2[0] - state_1[0]) + abs(state_2[1] - state_1[1]) + delta_theta
+    
+    print("A* with L1 and angle heuristic")
+    planner = AStar(collision_function, l1_angle_heuristic)
+    planner.setup(start, goal)
+    planner.build_path()
     
 if __name__ == "__main__":
     main()
