@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+from angle_util import angle_difference
 from environment import State, ManipulatorEnv
 from rrt import RRTPlanner
 from video_util import animate_plan
@@ -30,35 +31,44 @@ def main():
 
     # Task 1B
 
-    random_state_1 = State(np.array([90, 0, 90, 0]))
-    env.state = random_state_1
-    print(
-        f"Random state: [{random_state_1.angles}]\tCollision: {env.check_collision(random_state_1)}"
-    )
-    env.render(plt_imsave=True, save_path="images/random_state_1.png")
+    # random_state_1 = State(np.array([90, 0, 90, 0]))
+    # env.state = random_state_1
+    # print(
+    #     f"Random state: [{random_state_1.angles}]\tCollision: {env.check_collision(random_state_1)}"
+    # )
+    # env.render(plt_imsave=True, save_path="images/random_state_1.png")
 
-    random_state_2 = State(np.array([0, 90, -45, -45]))
-    env.state = random_state_2
-    print(
-        f"Random state: [{random_state_2.angles}]\tCollision: {env.check_collision(random_state_2)}"
-    )
-    env.render(plt_imsave=True, save_path="images/random_state_2.png")
+    # random_state_2 = State(np.array([0, 90, -45, -45]))
+    # env.state = random_state_2
+    # print(
+    #     f"Random state: [{random_state_2.angles}]\tCollision: {env.check_collision(random_state_2)}"
+    # )
+    # env.render(plt_imsave=True, save_path="images/random_state_2.png")
 
-    random_state_3 = State(np.array([-135, -135, 90, 0]))
-    env.state = random_state_3
-    print(
-        f"Random state: [{random_state_3.angles}]\tCollision: {env.check_collision(random_state_3)}"
-    )
-    env.render(plt_imsave=True, save_path="images/random_state_3.png")
+    # random_state_3 = State(np.array([-135, -135, 90, 0]))
+    # env.state = random_state_3
+    # print(
+    #     f"Random state: [{random_state_3.angles}]\tCollision: {env.check_collision(random_state_3)}"
+    # )
+    # env.render(plt_imsave=True, save_path="images/random_state_3.png")
 
-    random_state_4 = State(np.array([-90, 90, 0, 0]))
-    env.state = random_state_4
-    print(
-        f"Random state: [{random_state_4.angles}]\tCollision: {env.check_collision(random_state_4)}"
-    )
-    env.render(plt_imsave=True, save_path="images/random_state_4.png")
+    # random_state_4 = State(np.array([-90, 90, 0, 0]))
+    # env.state = random_state_4
+    # print(
+    #     f"Random state: [{random_state_4.angles}]\tCollision: {env.check_collision(random_state_4)}"
+    # )
+    # env.render(plt_imsave=True, save_path="images/random_state_4.png")
 
-    # planner = RRTPlanner(env)
+    # Task 2A
+
+    env.state = start_state
+
+    def distance(state_1, state_2):
+        return np.sum(angle_difference(state_2, state_1))
+
+    planner = RRTPlanner(env, distance)
+
+    print(planner.sample())
 
     # plan = planner.plan(start_state, goal_state)
     # print("RRT planner has finished successfully")

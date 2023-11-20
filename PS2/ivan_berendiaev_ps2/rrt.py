@@ -3,6 +3,7 @@ from typing import List, Callable
 import numpy as np
 
 from environment import State, ManipulatorEnv
+from angle_util import angle_linspace
 
 
 class RRTPlanner:
@@ -17,7 +18,21 @@ class RRTPlanner:
         self._env = env
         self._distance_fn = distance_fn
         self._max_angle_step = max_angle_step
+        self._N = 1000000
+        self._G = {}
+
+    def sample(self):
+        return np.array(
+            [
+                np.random.choice(
+                    np.arange(-180, 180, 10),
+                )
+                for i in range(4)
+            ]
+        )
 
     def plan(self, start_state: State, goal_state: State) -> List[State]:
-        # TODO: Implement
+        self._G[start_state] = None
+        for i in range(self._N):
+            pass
         pass
