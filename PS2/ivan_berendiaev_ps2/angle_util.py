@@ -2,9 +2,11 @@ from typing import Union
 import numpy as np
 
 
-def angle_difference(angle1: Union[float, np.ndarray],
-                     angle2: Union[float, np.ndarray],
-                     directional=False) -> Union[float, np.ndarray]:
+def angle_difference(
+    angle1: Union[float, np.ndarray],
+    angle2: Union[float, np.ndarray],
+    directional=False,
+) -> Union[float, np.ndarray]:
     """
     :param angle1: first angle in degrees
     :param angle2: second angle in degrees
@@ -19,9 +21,9 @@ def angle_difference(angle1: Union[float, np.ndarray],
     return delta_angle
 
 
-def angle_linspace(start_angle: Union[float, np.ndarray],
-                   end_angle: Union[float, np.ndarray],
-                   n: int):
+def angle_linspace(
+    start_angle: Union[float, np.ndarray], end_angle: Union[float, np.ndarray], n: int
+):
     """
     :param start_angle: start angle (or whole configuration) in degrees
     :param end_angle: end angle (or whole configuration) in degrees
@@ -30,7 +32,9 @@ def angle_linspace(start_angle: Union[float, np.ndarray],
     if type(start_angle) is np.ndarray:
         assert type(start_angle) == type(end_angle)
         assert start_angle.shape == end_angle.shape
-        return np.array([angle_linspace(a1, a2, n) for (a1, a2) in zip(start_angle, end_angle)]).T
+        return np.array(
+            [angle_linspace(a1, a2, n) for (a1, a2) in zip(start_angle, end_angle)]
+        ).T
 
     step = angle_difference(end_angle, start_angle) / n
     result = [start_angle]

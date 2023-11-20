@@ -14,17 +14,27 @@ def main():
 
     start_state = State(np.array(data["start_state"]))
     goal_state = State(np.array(data["goal_state"]))
-    env = ManipulatorEnv(obstacles=np.array(data["obstacles"]),
-                         initial_state=start_state,
-                         collision_threshold=data["collision_threshold"])
 
-    planner = RRTPlanner(env)
+    env = ManipulatorEnv(
+        obstacles=np.array(data["obstacles"]),
+        initial_state=start_state,
+        collision_threshold=data["collision_threshold"],
+    )
 
-    plan = planner.plan(start_state, goal_state)
-    print("RRT planner has finished successfully")
+    # Task 1A
 
-    animate_plan(env, plan)
+    env.render(plt_imsave=True, save_path="images/start_state.png")
+
+    env.state = goal_state
+    env.render(plt_imsave=True, save_path="images/goal_state.png")
+
+    # planner = RRTPlanner(env)
+
+    # plan = planner.plan(start_state, goal_state)
+    # print("RRT planner has finished successfully")
+
+    # animate_plan(env, plan)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

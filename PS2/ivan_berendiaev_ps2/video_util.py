@@ -7,7 +7,11 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from environment import ManipulatorEnv, State
 
 
-def animate_plan(env: ManipulatorEnv, plan: List[State], video_output_file: Optional[str] = "solve_4R.mp4"):
+def animate_plan(
+    env: ManipulatorEnv,
+    plan: List[State],
+    video_output_file: Optional[str] = "solve_4R.mp4",
+):
     """
     Visualizes the plan with pyplot and, optionally, saves it to the video file.
 
@@ -31,8 +35,12 @@ def animate_plan(env: ManipulatorEnv, plan: List[State], video_output_file: Opti
         if video_writer is not None:
             video_writer.write(mat)
         elif video_output_file is not None:
-            video_writer = cv2.VideoWriter(video_output_file, cv2.VideoWriter_fourcc(*'mp4v'), 10,
-                                           (mat.shape[1], mat.shape[0]))
+            video_writer = cv2.VideoWriter(
+                video_output_file,
+                cv2.VideoWriter_fourcc(*"mp4v"),
+                10,
+                (mat.shape[1], mat.shape[0]),
+            )
             video_writer.write(mat)
 
         if i != len(plan) - 1:
