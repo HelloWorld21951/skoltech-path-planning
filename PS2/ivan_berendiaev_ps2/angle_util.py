@@ -2,6 +2,10 @@ from typing import Union
 import numpy as np
 
 
+def wrap_angle(angle):
+    return (angle + 180) % 360 - 180
+
+
 def angle_difference(
     angle1: Union[float, np.ndarray],
     angle2: Union[float, np.ndarray],

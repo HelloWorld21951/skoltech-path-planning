@@ -64,16 +64,17 @@ def main():
     env.state = start_state
 
     def distance(state_1, state_2):
-        return np.sum(angle_difference(state_2, state_1))
+        return np.sum(np.abs(angle_difference(state_2.angles, state_1.angles)))
 
     planner = RRTPlanner(env, distance)
 
-    print(planner.sample())
+    plan = planner.plan(start_state, goal_state)
 
-    # plan = planner.plan(start_state, goal_state)
-    # print("RRT planner has finished successfully")
+    print(len(plan))
+    if len(plan) == 0:
+        return
 
-    # animate_plan(env, plan)
+    animate_plan(env, plan)
 
 
 if __name__ == "__main__":

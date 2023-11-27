@@ -14,6 +14,9 @@ class State:
         self._angles = angles.copy()
         self._joints = State._calculate_joint_positions(angles)
 
+    def __eq__(self, __value: object) -> bool:
+        return np.all(self.angles == __value.angles)
+
     @property
     def angles(self) -> np.ndarray:
         """
