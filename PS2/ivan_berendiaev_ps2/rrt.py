@@ -73,10 +73,10 @@ class RRTPlanner:
             delta = angle_difference(node_2.state.angles, new_angles)
             result.append(new_node)
             delta_goal = angle_difference(goal_state.angles, new_angles)
-            if np.all(delta_goal < self._max_angle_step / 2):
+            if np.all(delta_goal < self._max_angle_step // 2):
                 result.pop(0)
                 return result
-            if np.all(np.abs(delta) < self._max_angle_step / 2):
+            if np.all(np.abs(delta) < self._max_angle_step // 2):
                 result.pop(0)
                 return result
         result.pop(0)
@@ -92,7 +92,7 @@ class RRTPlanner:
                 continue
             self._node_list.extend(q_new)
             delta = np.abs(angle_difference(q_new[-1].state.angles, goal_state.angles))
-            if np.all(delta < self._max_angle_step / 2):
+            if np.all(delta < self._max_angle_step // 2):
                 print("Path found")
                 print(len(self._node_list))
                 return self.get_path()

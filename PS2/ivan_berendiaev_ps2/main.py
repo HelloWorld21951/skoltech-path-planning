@@ -61,12 +61,48 @@ def main():
 
     # Task 2A
 
+    # env.state = start_state
+
+    # def distance(state_1, state_2):
+    #     return np.sum(np.abs(angle_difference(state_2.angles, state_1.angles)))
+
+    # planner = RRTPlanner(env, distance)
+
+    # plan = planner.plan(start_state, goal_state)
+
+    # print(len(plan))
+    # if len(plan) == 0:
+    #     return
+
+    # animate_plan(env, plan)
+
+    # Task 2C
+
+    # def distance_weighted(state_1, state_2):
+    #     distance = 0
+    #     number_of_angles = state_1.angles.shape[0]
+    #     for i in range(number_of_angles):
+    #         distance += np.abs(angle_difference(state_2.angles[i], state_1.angles[i])) * (number_of_angles - 1)
+    #     return distance
+
+    # planner = RRTPlanner(env, distance_weighted)
+
+    # plan = planner.plan(start_state, goal_state)
+
+    # print(len(plan))
+    # if len(plan) == 0:
+    #     return
+
+    # animate_plan(env, plan, "plan_weighted.mp4")
+
+    # Task 2D
+    
     env.state = start_state
 
     def distance(state_1, state_2):
         return np.sum(np.abs(angle_difference(state_2.angles, state_1.angles)))
 
-    planner = RRTPlanner(env, distance)
+    planner = RRTPlanner(env, distance, 15)
 
     plan = planner.plan(start_state, goal_state)
 
@@ -74,7 +110,7 @@ def main():
     if len(plan) == 0:
         return
 
-    animate_plan(env, plan)
+    animate_plan(env, plan, "plan_big_step.mp4")
 
 
 if __name__ == "__main__":
