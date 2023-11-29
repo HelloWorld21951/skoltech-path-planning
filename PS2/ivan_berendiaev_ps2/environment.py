@@ -14,9 +14,6 @@ class State:
         self._angles = angles.copy()
         self._joints = State._calculate_joint_positions(angles)
 
-    def __eq__(self, __value: object) -> bool:
-        return np.all(self.angles == __value.angles)
-
     @property
     def angles(self) -> np.ndarray:
         """
@@ -119,9 +116,7 @@ class ManipulatorEnv:
 
         return False
 
-    def render(
-        self, plt_show=False, plt_imsave=False, save_path="images/figure.png"
-    ) -> None:
+    def render(self, plt_imsave=False, savefile="image.png") -> None:
         """
         Displays current configuration.
         :param plt_show: whether to call plt.show() or not
@@ -138,10 +133,9 @@ class ManipulatorEnv:
         for obs in self._obstacles:
             plt.gca().add_patch(plt.Circle((obs[0], obs[1]), obs[2], fill=True))
         plt.axis("equal")
-        if plt_show:
-            plt.show()
+        plt.show()
         if plt_imsave:
-            plt.savefig(save_path)
+            plt.savefig(savefile)
 
     @staticmethod
     def _plot_segment(s, color_, is_start_link=False, is_end_link=False):

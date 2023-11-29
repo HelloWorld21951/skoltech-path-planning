@@ -20,8 +20,7 @@ def angle_difference(
         assert type(angle1) == type(angle2)
         assert angle1.shape == angle2.shape
         return np.array([angle_difference(a1, a2) for (a1, a2) in zip(angle1, angle2)])
-    delta_angle = angle1 - angle2
-    delta_angle = (delta_angle + 180) % 360 - 180
+    delta_angle = wrap_angle(angle1 - angle2)
     return delta_angle
 
 
