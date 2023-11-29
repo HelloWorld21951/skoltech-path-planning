@@ -116,7 +116,7 @@ class ManipulatorEnv:
 
         return False
 
-    def render(self, plt_imsave=False, savefile="image.png") -> None:
+    def render(self, plt_show=True, save_img=False, savefile="image.png") -> None:
         """
         Displays current configuration.
         :param plt_show: whether to call plt.show() or not
@@ -133,8 +133,9 @@ class ManipulatorEnv:
         for obs in self._obstacles:
             plt.gca().add_patch(plt.Circle((obs[0], obs[1]), obs[2], fill=True))
         plt.axis("equal")
-        plt.show()
-        if plt_imsave:
+        if plt_show:
+            plt.show()
+        if save_img:
             plt.savefig(savefile)
 
     @staticmethod
