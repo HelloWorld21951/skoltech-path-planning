@@ -4,44 +4,44 @@ import matplotlib.animation as animation
 
 # this are the set of possible actions admitted in this problem
 action_space = []
-action_space.append((-1,0))
-action_space.append((0,-1))
-action_space.append((1,0))
-action_space.append((0,1))
+action_space.append((-1, 0))
+action_space.append((0, -1))
+action_space.append((1, 0))
+action_space.append((0, 1))
 
 
 def plot_enviroment(env, x, goal):
     """
     env is the grid enviroment
-    x is the state 
+    x is the state
     """
-    dims = env.shape    
+    dims = env.shape
     current_env = np.copy(env)
     # plot agent
-    current_env[x] = 1.0 #yellow
+    current_env[x] = 1.0  # yellow
     # plot goal
     current_env[goal] = 0.3
     return current_env
 
 
-def state_consistency_check(env,x):
+def state_consistency_check(env, x):
     """Checks wether or not the proposed state is a valid state, i.e. is in colision or our of bounds"""
     # check for collision
-    if x[0] < 0 or x[1] < 0 or x[0] >= env.shape[0] or x[1] >= env.shape[1] :
-        #print('out of bonds')
+    if x[0] < 0 or x[1] < 0 or x[0] >= env.shape[0] or x[1] >= env.shape[1]:
+        # print('out of bonds')
         return False
-    if env[x] >= 1.0-1e-4:
-        #print('Obstacle')
+    if env[x] >= 1.0 - 1e-4:
+        # print('Obstacle')
         return False
     return True
 
 
-def transition_function(env,x,u):
+def transition_function(env, x, u):
     """Transition function for states in this problem
     x: current state, this is a tuple (i,j)
     u: current action, this is a tuple (i,j)
     env: enviroment
-    
+
     Output:
     new state
     True if correctly propagated
@@ -49,19 +49,19 @@ def transition_function(env,x,u):
     """
     xnew = np.array(x) + np.array(u)
     xnew = tuple(xnew)
-    #print('xnew',xnew)
-    if state_consistency_check(env,xnew):
+    # print('xnew',xnew)
+    if state_consistency_check(env, xnew):
         return xnew, True
     return x, False
 
 
-def probabilistic_transition_function(env,x,u, epsilon = 0.6):
+def probabilistic_transition_function(env, x, u, epsilon=0.6):
     """Probabilistic Transition function requires:
     x: current state, this is a tuple (i,j)
     u: current action, this is a tuple (i,j)
     env: enviroment
     epsilon (in [0,1]): This is the probability of carrying out the desired action, in the extreme, 1 indicates a perfect action execution.
-    
+
     Output:
     state_propagated_list: list of propagated states
     prob_list: list of the corresponding state's prob, in the same order
@@ -71,7 +71,7 @@ def probabilistic_transition_function(env,x,u, epsilon = 0.6):
     for action in action_space:
         xnew = np.array(x) + np.array(action)
         xnew = tuple(xnew)
-        prob = (1-epsilon)/3
+        prob = (1 - epsilon) / 3
         if action == u:
             prob = epsilon
         state_propagated_list.append(xnew)
@@ -80,4 +80,22 @@ def probabilistic_transition_function(env,x,u, epsilon = 0.6):
     return state_propagated_list, prob_list
 
 
+def record_plan(env, initial_state, goal_state, single_plan_iteration, filename):
+    fig = plt.figure()
+    imgs = []
+    x = initial_state
+    for plan_iters in range(100):
+        im = plot_enviroment(env, x, goal_state)
+        plot = plt.imshow(im)
+        imgs.append([plot])
+        x = single_plan_iteration(x)
+        if x == goal_state:
+            print("Goal achieved in iters =", plan_iters)
+            break
 
+    im = plot_enviroment(env, x, goal_state)
+    plot = plt.imshow(im)
+    imgs.append([plot])
+    ani = animation.ArtistAnimation(fig, imgs, interval=100, blit=True)
+    ani.save(filename)
+    plt.show()
