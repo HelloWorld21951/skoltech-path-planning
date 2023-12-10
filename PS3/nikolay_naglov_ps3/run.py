@@ -1,8 +1,7 @@
 #!/usr/bin/python
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from utils import plot_enviroment, action_space, record_plan, transition_function
+from utils import record_plan, transition_function
 from vi import vi, policy_vi
 from mdp import mdp, policy_mdp
 
@@ -36,10 +35,10 @@ for i in iterations:
 # task 2: Plan
 # ======================================
 task_2_folder = "results/task_2"
-policy = policy_vi(environment, Gopt)
 
 
 def vi_plan_iteration(x):
+    policy = policy_vi(environment, Gopt)
     return transition_function(environment, x, policy[x])[0]
 
 
@@ -54,7 +53,21 @@ record_plan(
 
 # task 3 MDP, Vopt
 # ======================================
-# Vopt = mdp(environment,goal)
+task_3_folder = "results/task_3"
+Vopt = mdp(environment, goal)
+plt.imshow(Vopt)
+plt.savefig(f"{task_3_folder}/final_V.png")
 
-# Visualization
-# ======================================
+
+def mdp_plan_iteration(x):
+    policy = policy_mdp(environment, Vopt)
+    return transition_function(environment, x, policy[x])[0]
+
+
+record_plan(
+    environment,
+    x_ini,
+    goal,
+    mdp_plan_iteration,
+    f"{task_3_folder}/plan_mdp.mp4",
+)
