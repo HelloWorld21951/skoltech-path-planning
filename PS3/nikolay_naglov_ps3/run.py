@@ -16,39 +16,39 @@ goal = (15, 29)
 
 # task 1 VI, Gopt
 # ======================================
-task_1_folder = "results/task_1"
-Gopt = vi(environment, goal)
-plt.imshow(Gopt)
-plt.savefig(f"{task_1_folder}/final_G.png")
-plt.clf()
+# task_1_folder = "results/task_1"
+# Gopt = vi(environment, goal)
+# plt.imshow(Gopt)
+# plt.savefig(f"{task_1_folder}/final_G.png")
+# plt.clf()
 
-iterations = [1]
-iterations.extend(list(range(10, 70, 10)))
+# iterations = [1]
+# iterations.extend(list(range(10, 70, 10)))
 
-for i in iterations:
-    G = vi(environment, goal, max_num_of_iterations=i)
-    plt.imshow(G)
-    plt.savefig(f"{task_1_folder}/G_{i}_iters.png")
-    plt.clf()
+# for i in iterations:
+#     G = vi(environment, goal, max_num_of_iterations=i)
+#     plt.imshow(G)
+#     plt.savefig(f"{task_1_folder}/G_{i}_iters.png")
+#     plt.clf()
 
 
 # task 2: Plan
 # ======================================
-task_2_folder = "results/task_2"
+# task_2_folder = "results/task_2"
 
 
-def vi_plan_iteration(x):
-    policy = policy_vi(environment, Gopt)
-    return transition_function(environment, x, policy[x])[0]
+# def vi_plan_iteration(x):
+#     policy = policy_vi(environment, Gopt)
+#     return transition_function(environment, x, policy[x])[0]
 
 
-record_plan(
-    environment,
-    x_ini,
-    goal,
-    vi_plan_iteration,
-    f"{task_2_folder}/plan_vi.mp4",
-)
+# record_plan(
+#     environment,
+#     x_ini,
+#     goal,
+#     vi_plan_iteration,
+#     f"{task_2_folder}/plan_vi.mp4",
+# )
 
 
 # task 3 MDP, Vopt

@@ -30,27 +30,22 @@ def mdp(env, goal, gamma=0.99, max_num_of_iterations=100):
                         transition_probs,
                     ) = probabilistic_transition_function(env, current_state, action)
                     rewards = []
-                    transition_states_values = []
+                    transition_state_value = V[
+                        transition_function(env, current_state, action)[0]
+                    ]
                     for state in transition_states:
-                        if not state_consistency_check(env, state):
-                            rewards.append(-1)
-                            transition_states_values.append(0)
-                        elif state == goal:
+                        if state == goal:
                             rewards.append(1)
-                            transition_states_values.append(V[state])
+                        elif not state_consistency_check(env, state):
+                            rewards.append(-1)
                         else:
                             rewards.append(0)
-                            transition_states_values.append(V[state])
                     current_reward_expectation = np.sum(
                         np.array(transition_probs) * np.array(rewards)
                     )
-                    transition_value_expectation = np.sum(
-                        np.array(transition_probs) * np.array(transition_states_values)
-                    )
                     new_value = max(
                         new_value,
-                        current_reward_expectation
-                        + gamma * transition_value_expectation,
+                        current_reward_expectation + gamma * transition_state_value,
                     )
                     new_V[current_state] = new_value
 
@@ -59,7 +54,7 @@ def mdp(env, goal, gamma=0.99, max_num_of_iterations=100):
             break
 
         V = new_V
-    V[goal] = np.max(V)
+    V[goal] = np.max(V) + 0.1
     return V
 
 
