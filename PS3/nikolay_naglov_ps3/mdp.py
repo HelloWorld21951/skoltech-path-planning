@@ -20,8 +20,8 @@ def mdp(env, goal, gamma=0.99, max_num_of_iterations=100):
     V[goal] = 1
     for i in range(max_num_of_iterations):
         new_V = V.copy()
-        for row in list(reversed(range(V.shape[0]))):
-            for column in list(reversed(range(V.shape[1]))):
+        for row in range(V.shape[0]):
+            for column in range(V.shape[1]):
                 current_state = (row, column)
                 new_value = -np.inf
                 for action in action_space:

@@ -28,21 +28,25 @@ goal = (15, 29)
 # ======================================
 Gopt = vi(environment, goal)
 plt.imshow(Gopt)
-plt.savefig(f"images/G_result.png")
+plt.savefig("images/G_result.png")
 
 
 # task 2: Plan
 # ======================================
-policy = policy_vi(environment, Gopt)
+# policy = policy_vi(environment, Gopt)
 
 
 # task 3 MDP, Vopt
 # ======================================
-# Vopt = mdp(environment,goal)
+Vopt = mdp(environment, goal)
+plt.imshow(Vopt)
+plt.savefig("images/V_result.png")
+
+policy = policy_mdp(environment, Gopt)
 
 # Visualization
 # ======================================
-if 0:
+if 1:
     fig = plt.figure()
     imgs = []
     x = x_ini
@@ -62,6 +66,6 @@ if 0:
     plot = plt.imshow(im)
     imgs.append([plot])
     ani = animation.ArtistAnimation(fig, imgs, interval=100, blit=True)
-    ani.save("plan_vi.mp4")
-    # ani.save('plan_mdp.mp4')
+    # ani.save("plan_vi.mp4")
+    ani.save("plan_mdp.mp4")
     plt.show()
