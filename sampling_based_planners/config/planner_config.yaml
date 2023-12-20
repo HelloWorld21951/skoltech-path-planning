@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    planner: "PRM* OMPL"
+    start:
+      x: 4.5
+      y: 0.5
+      theta: 0.0
+    goal:
+      x: 0.5
+      y: 9.5
+      theta: 130.0
+    robot:
+      width: 0.3
+      length: 0.2
+    map_name: "map_5x10_open"
