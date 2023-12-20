@@ -3,8 +3,6 @@
 #include "utils/geometry.hpp"
 
 struct RobotSize {
-  RobotSize(double length, double width) : length(length), width(width){};
-
   double length;
   double width;
 };

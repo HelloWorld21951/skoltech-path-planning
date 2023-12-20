@@ -2,6 +2,7 @@
 
 #include "robot_state.hpp"
 #include "utils/geometry.hpp"
+#include "utils/logger.hpp"
 #include <unordered_map>
 #include <vector>
 
@@ -43,9 +44,11 @@ inline const std::unordered_map<std::string, Map2DConfig> mapList{
 
 class Map2D {
 public:
-  explicit Map2D(const std::string &mapName) : config(mapList.at(mapName)) {
-    const double halfWidth = config.width / 2.0;
-    const double halfLength = config.length / 2.0;
+  explicit Map2D(const std::string &mapName,
+                 std::shared_ptr<LoggerInterface> logger)
+      : config_(mapList.at(mapName)), logger(logger) {
+    const double halfWidth = config_.width / 2.0;
+    const double halfLength = config_.length / 2.0;
     const Point2D topLeft{halfLength, -halfWidth};
     const Point2D topRight{halfLength, halfWidth};
     const Point2D bottomLeft{-halfLength, halfWidth};
@@ -54,26 +57,35 @@ public:
   };
 
   bool checkStateConsistency(const RobotState &robotState) {
-    return checkInBounds(robotState) && checkInCollision(robotState);
+    this->logger->log("Consistency Check");
+    return !checkOutOfBounds(robotState) && !checkInCollision(robotState);
   }
 
+  Map2DConfig config() const { return config_; }
+
 private:
-  const Map2DConfig config;
+  const Map2DConfig config_;
+  std::shared_ptr<LoggerInterface> logger;
   Polygon mapBounds;
 
 private:
   bool checkInCollision(const RobotState &robotState) {
-    for (const auto &obstacle : this->config.obstacles) {
+    for (const auto &obstacle : this->config_.obstacles) {
       if (robotState.contours.intersects(obstacle) ||
           robotState.contours.within(obstacle) ||
           obstacle.within(robotState.contours)) {
+        this->logger->log("In collision");
         return true;
       }
     }
     return false;
   };
 
-  bool checkInBounds(const RobotState &robotState) {
-    return !robotState.contours.within(this->mapBounds);
+  bool checkOutOfBounds(const RobotState &robotState) {
+    if (!robotState.contours.within(this->mapBounds)) {
+      this->logger->log("Out of bounds");
+      return true;
+    }
+    return false;
   }
 };
