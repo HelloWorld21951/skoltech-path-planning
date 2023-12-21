@@ -21,7 +21,7 @@ public:
     map_bounds.setLow(0, 0.0);
     map_bounds.setHigh(0, this->map->config().width);
     map_bounds.setLow(1, 0.0);
-    map_bounds.setHigh(1, this->map->config().length);
+    map_bounds.setHigh(1, this->map->config().height);
 
     map_space->setBounds(map_bounds);
 
@@ -53,7 +53,7 @@ public:
 
     planner_task.setStartAndGoalStates(start_point_state, goal_point_state);
     planner_task.setup();
-    ompl::base::PlannerStatus is_task_solved = planner_task.solve(20.0);
+    ompl::base::PlannerStatus is_task_solved = planner_task.solve();
 
     if (is_task_solved && planner_task.haveExactSolutionPath()) {
       this->logger->log("Path found");

@@ -7,8 +7,8 @@
       theta: 0.0
     goal:
       x: 0.5
-      y: 9.5
-      theta: 130.0
+      y: 4.5
+      theta: 0.0 #130.0
     robot:
       width: 0.3
       length: 0.2

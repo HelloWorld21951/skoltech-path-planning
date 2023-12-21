@@ -3,11 +3,12 @@
 #include "robot_state.hpp"
 #include "utils/geometry.hpp"
 #include "utils/logger.hpp"
+#include <string>
 #include <unordered_map>
 #include <vector>
 
 struct Map2DConfig {
-  double length;
+  double height;
   double width;
   std::vector<Polygon> obstacles;
 };
@@ -15,8 +16,8 @@ struct Map2DConfig {
 inline const std::unordered_map<std::string, Map2DConfig> mapList{
     {"map_5x10_open",
      Map2DConfig{
-         5,
          10,
+         5,
          {
              Polygon({{0.2, 0.2}, {0.2, 0.6}, {1.0, 0.6}, {1.0, 0.2}}),
              Polygon({{3.0, 5.5}, {4.0, 6.1}, {4.0, 5.0}}),
@@ -47,17 +48,18 @@ public:
   explicit Map2D(const std::string &mapName,
                  std::shared_ptr<LoggerInterface> logger)
       : config_(mapList.at(mapName)), logger(logger) {
-    const double halfWidth = config_.width / 2.0;
-    const double halfLength = config_.length / 2.0;
-    const Point2D topLeft{halfLength, -halfWidth};
-    const Point2D topRight{halfLength, halfWidth};
-    const Point2D bottomLeft{-halfLength, halfWidth};
-    const Point2D bottomRight{-halfLength, -halfWidth};
+    const Point2D topLeft{0.0, config_.height};
+    const Point2D topRight{config_.width, config_.height};
+    const Point2D bottomLeft{0.0, 0.0};
+    const Point2D bottomRight{config_.width, 0.0};
     this->mapBounds = Polygon({topLeft, topRight, bottomRight, bottomLeft});
+    logger->log("Map bounds:");
+    for (const auto& point: this->mapBounds.BoostPoly().outer()){
+      logger->log(std::to_string(point.x()) + " " + std::to_string(point.y()));
+    }
   };
 
   bool checkStateConsistency(const RobotState &robotState) {
-    this->logger->log("Consistency Check");
     return !checkOutOfBounds(robotState) && !checkInCollision(robotState);
   }
 

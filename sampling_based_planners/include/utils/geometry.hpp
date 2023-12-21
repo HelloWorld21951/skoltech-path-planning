@@ -46,6 +46,7 @@ public:
   bool within(const Polygon &other) const {
     return boost::geometry::within(this->BoostPoly(), other.BoostPoly());
   }
+  
 
 private:
   BoostPolygon boostPolygon;
