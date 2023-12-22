@@ -1,16 +1,31 @@
 #pragma once
 
+#include "ompl/base/PlannerData.h"
 #include "planners/planner_interface.hpp"
 #include "robot_state.hpp"
 #include "utils/geometry.hpp"
 #include "utils/logger.hpp"
+#include <fstream>
 #include <ompl/base/spaces/SE2StateSpace.h>
 #include <ompl/geometric/SimpleSetup.h>
 #include <ompl/geometric/planners/prm/PRMstar.h>
+#include <ompl/geometric/planners/rrt/RRTstar.h>
+#include <ompl/geometric/planners/rrt/RRTConnect.h>
+#include <ompl/geometric/planners/fmt/FMT.h>
+#include <ompl/geometric/planners/informedtrees/BITstar.h>
 
-class PRMStarOMPLPlanner : public PlannerInterface {
+
+using PRMStar = ompl::geometric::PRMstar;
+using RRTStar = ompl::geometric::RRTstar;
+using RRTConnect = ompl::geometric::RRTConnect;
+using FMT = ompl::geometric::FMT;
+using BITStar = ompl::geometric::BITstar;
+
+
+template<typename PlannerType>
+class OMPLPlanner : public PlannerInterface{
 public:
-  PRMStarOMPLPlanner(std::shared_ptr<LoggerInterface> logger)
+  OMPLPlanner(std::shared_ptr<LoggerInterface> logger)
       : PlannerInterface(), logger(logger){};
 
   PlanningResult plan() override {
@@ -48,15 +63,21 @@ public:
               RobotState(this->robotSize, omplStateToState(omplState)));
         });
 
-    planner_task.setPlanner(std::make_shared<ompl::geometric::PRMstar>(
+    planner_task.setPlanner(std::make_shared<PlannerType>(
         planner_task.getSpaceInformation()));
 
     planner_task.setStartAndGoalStates(start_point_state, goal_point_state);
     planner_task.setup();
-    ompl::base::PlannerStatus is_task_solved = planner_task.solve();
+    auto is_task_solved = planner_task.solve(5);
 
-    if (is_task_solved && planner_task.haveExactSolutionPath()) {
+    if (is_task_solved) {
       this->logger->log("Path found");
+      std::ofstream output("planner_solution.txt");
+      std::ofstream graph("graph.txt");
+      auto pd = ompl::base::PlannerData(planner_task.getSpaceInformation());
+      planner_task.getSolutionPath().printAsMatrix(output);
+      planner_task.getPlannerData(pd);
+      pd.printPLY(graph);
       return PlanningResult::SUCCESS;
     } else {
       this->logger->log("Path not found");

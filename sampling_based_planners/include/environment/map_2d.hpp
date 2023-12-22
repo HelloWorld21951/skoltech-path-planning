@@ -14,7 +14,7 @@ struct Map2DConfig {
 };
 
 inline const std::unordered_map<std::string, Map2DConfig> mapList{
-    {"map_5x10_open",
+    {"map_5x10",
      Map2DConfig{
          10,
          5,
@@ -23,23 +23,13 @@ inline const std::unordered_map<std::string, Map2DConfig> mapList{
              Polygon({{3.0, 5.5}, {4.0, 6.1}, {4.0, 5.0}}),
          },
      }},
-    {"map_5x10_cluttered",
+    {"map_500x1000",
      Map2DConfig{
-         5,
-         10,
-         {},
-     }},
-    {"map_500x1000_open",
-     Map2DConfig{
-         500,
          1000,
-         {},
-     }},
-    {"map_500x1000_cluttered",
-     Map2DConfig{
          500,
-         1000,
-         {},
+         {
+          Polygon({{15.0, 15.0}, {15.0, 950.0}, {450.0, 950.0}, {450.0, 15.0}}),
+         },
      }},
 };
 
@@ -76,7 +66,6 @@ private:
       if (robotState.contours.intersects(obstacle) ||
           robotState.contours.within(obstacle) ||
           obstacle.within(robotState.contours)) {
-        this->logger->log("In collision");
         return true;
       }
     }
@@ -85,7 +74,6 @@ private:
 
   bool checkOutOfBounds(const RobotState &robotState) {
     if (!robotState.contours.within(this->mapBounds)) {
-      this->logger->log("Out of bounds");
       return true;
     }
     return false;

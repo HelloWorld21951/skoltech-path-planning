@@ -10,7 +10,7 @@
 
 PlannersServer::PlannersServer(rclcpp::Node::SharedPtr node)
     : node(node), logger(std::make_shared<RosLogger>(node)),
-      planner(std::make_shared<PRMStarOMPLPlanner>(logger)),
+      planner(std::make_shared<OMPLPlanner<BITStar>>(logger)),
       robotSize(RobotSize{getParameter<double>(node, "robot.length"),
                           getParameter<double>(node, "robot.width")}),
       environmentMap(std::make_shared<Map2D>(
